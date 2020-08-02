@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script>
+            var token_csrf = "{{ csrf_token }}";
+
+            function query(){
+                console.log($("#name").val())
+                $.ajax({
+                    url:"/query",
+                    type:"POST",
+                    dataType: "json",
+                    headers: { "X-CSRFToken": token_csrf },
+                    data:{keyWord:$("#name").val()},
+                    success:function(data){
+                        console.log("success")
+                        $('#tableDiv').empty();
+                        if(data.status == 1){
+                            $("#tableDiv").html(data.html)
+                        }else{
+                            $("#tableDiv").html("")
+                        }
+                        
+                    }
+                })
+            }
+        </script>
+        <title>电影《灰猎犬号》 短评</title>
+    </head>
+
+<body>
+    <div>
+        <div>
+            <span>电影《灰猎犬号》 短评</span>
+        </div>
+        <div id="query">
+            <input type="text" id ="name" placeholder="输入关键字查询详情" />
+            <button type="button" onclick="query()">搜索</button>
+        </div>
+        <div id = "tableDiv">
+            <table style="border-collapse:separate; border-spacing:0px 10px;">
+                <tr>
+                    <td style="width: 50px;">评分</td>
+                    <td style="width: 400px;">短评</td>
+                    <td style="width: 200px;">评价日期</td>
+                </tr>
+                {% for m in commensts %}
+                <tr>
+                    <td>{{ m.rating }} </td>
+                    <td>{{ m.content }} </td>
+                    <td>{{ m.comment_time }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

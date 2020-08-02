@@ -1,0 +1,16 @@
+<div id = "tableDiv">
+    <table style="border-collapse:separate; border-spacing:0px 10px;">
+        <tr>
+            <td style="width: 50px;">评分</td>
+            <td style="width: 400px;">短评</td>
+            <td style="width: 200px;">评价日期</td>
+        </tr>
+        {% for m in commensts %}
+        <tr>
+            <td>{{ m.rating }} </td>
+            <td>{{ m.content }} </td>
+            <td>{{ m.comment_time }} </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
