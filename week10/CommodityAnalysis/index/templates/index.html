@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block page-header %}
+手机评论
+{% endblock %}
+
+{% block page-content %}
+<table class="table table-striped">    
+    <thead>　　　　　　　　　　　　　　　　　
+        <tr>　　　　
+            <th>id</th>　　　　　　　　　
+            <th>商品名称</th>
+            <th>标签</th>
+            <th>商城</th>
+            <th>频道</th>
+            <th>当前排名</th>
+            <th>发布时间</th>
+            <th>正面评价数</th>
+            <th>负面评价数</th>
+        </tr>
+    </thead>
+    <tbody>　　　　　　　　　　　　　　　　　　　　　　　　
+        {% for p in product_list %}
+            <tr>
+                <td>{{ p.id }}</td>　　　　　　
+                <td><a href="/comment/?product_id={{ p.id }}"> {{p.pagetitle}}</a></td>
+                <td>{{ p.tab }}</td>
+                <td>{{ p.mall }}</td>
+                <td>{{ p.channel }}</td>
+                <td>{{ p.position }}</td>    
+                <td>{{ p.release_time|date:"Y-m-d H:i:s" }}</td>　
+                <td>{{ p.pos_count }}</td>
+                <td>{{ p.neg_count }}</td>   
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

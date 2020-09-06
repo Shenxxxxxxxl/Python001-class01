@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)https://v3.bootcss.com/examples/dashboard/ -->
+<html lang="zh-CN">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon">
+
+  <title>Dashboard Template for Bootstrap</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="/static/css/dashboard.css" rel="stylesheet">
+  <link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+  <style type="text/css">
+    .highcharts-figure,
+    .highcharts-data-table table {
+      min-width: 320px;
+      max-width: 800px;
+      margin: 1em auto;
+    }
+
+    .highcharts-data-table table {
+      font-family: Verdana, sans-serif;
+      border-collapse: collapse;
+      border: 1px solid #EBEBEB;
+      margin: 10px auto;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+      padding: 1em 0;
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    .highcharts-data-table th {
+      font-weight: 600;
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+      background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+      background: #f1f7ff;
+    }
+
+
+    input[type="number"] {
+      min-width: 50px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+          aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/phone/">舆情监控</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" onclick="query()">查询</a></li>
+        </ul>
+        <form class="navbar-form navbar-right">
+          <input type="text" class="form-control" placeholder="输入商品名称或评价内容..." id="keyWord">
+          <input type="text" id="date" name="datetimepicker" value=" " placeholder="查询年月" class="form-control">
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+          {% if  currentLi == '1' %}
+          <li class="active"><a href="/phone/">手机列表 <span class="sr-only">(current)</span></a></li>
+          <li><a href="/comment/">评论列表</a></li>
+          {% else %}
+          <li><a href="/phone/">手机列表</a></li>
+          <li class="active"><a href="/comment/">评论列表 <span class="sr-only">(current)</span></a></li>
+          {% endif %}
+        </ul>
+
+      </div>
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">{% block page-header %}{% endblock %}</h1>
+
+        <div class="row placeholders">
+          <div id="container"></div>
+        </div>
+
+        <h2 class="sub-header">{% block page-header2 %}{% endblock %}</h2>
+        <div class="table-responsive">
+          {% block page-content %}
+          your page content
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="/static/js/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="/static/js/jquery.min.js"><\/script>')</script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+  <script src="/static/js/holder.min.js"></script>
+  <script src="/static/js/highcharts.js"></script>
+  <script src="/static/js/exporting.js"></script>
+  <script src="/static/js/export-data.js"></script>
+  <script src="/static/js/accessibility.js"></script>
+  <script src="/static/js/bootstrap-datetimepicker.js"></script>
+  <script src="/static/js/bootstrap-datetimepicker.zh-CN.js"></script>
+  <script type="text/javascript">
+    Highcharts.chart('container', {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: '舆情分析'
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      accessibility: {
+        point: {
+          valueSuffix: '%'
+        }
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+          }
+        }
+      },
+      series: [{
+        name: 'Brands',
+        colorByPoint: true,
+        data: [{
+          name: '正向舆论',
+          y: {{ pos_rate }},
+        sliced: true,
+        selected: true
+              }, {
+      name: '负面舆论',
+      y: {{ neg_rate }}
+              }]
+          }]
+      });
+  </script>
+
+  <script type="text/javascript">
+    var token_csrf = "{{ csrf_token }}";
+    let q_param = getQueryString();
+    if (q_param['keyWord']) {
+      $("#keyWord").val(q_param['keyWord'])
+    }
+
+    if (q_param['date']) {
+      $("#date").val(q_param['date'])
+    }
+
+    function getQueryString() {
+      var qs = window.location.search.substr(1), // 获取url中"?"符后的字串  
+        args = {}, // 保存参数数据的对象
+        items = qs.length ? qs.split("&") : [], // 取得每一个参数项,
+        item = null,
+        len = items.length;
+
+      for (var i = 0; i < len; i++) {
+        item = items[i].split("=");
+        var name = decodeURIComponent(item[0]),
+          value = decodeURIComponent(item[1]);
+        if (name) {
+          args[name] = value;
+        }
+      }
+      return args;
+    }
+
+    function getParamUrl(data, url) {
+      if (!data) return url
+      // body... 请求序列化
+      const _url = url
+      let dataStr = '' // 数据拼接字符串
+      Object.keys(data).forEach((key) => {
+        dataStr += `${key}=${data[key]}&`
+      })
+      dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'))
+      const newurl = `${_url}?${dataStr}`
+      return newurl
+    }
+
+    function query() {
+      let kkword = $("#keyWord").val();
+      if($('#date').val() !=''){
+        q_param['date'] = $('#date').val().trim()
+      }
+      q_param['keyWord'] = kkword
+      let curl = '/phone/';
+      if ({{ currentLi }} != '1') {
+        curl = '/comment/'
+      }
+      url = getParamUrl(q_param, curl)
+      window.location.href = url
+    }
+
+  </script>
+  <script type="text/javascript">
+    $('#date').datetimepicker({
+      forceParse: 0,//设置为0，时间不会跳转1899，会显示当前时间。
+      language: 'zh-CN',//显示中文
+      format: 'yyyy-mm-dd',//显示格式
+      minView: "month",//设置只显示到月份
+      initialDate: new Date(),//初始化当前日期
+      autoclose: true,//选中自动关闭
+      todayBtn: true//显示今日按钮
+    })
+  </script>
+
+</body>
+<scroll-to-top-button-container data-position-vertical="center" data-position-horizontal="right" data-state-active="">
+  <noscript>
+    <style>
+      scroll-to-top-button-container {
+        display: none !important;
+      }
+    </style>
+  </noscript>
+</scroll-to-top-button-container>
+
+</html>
